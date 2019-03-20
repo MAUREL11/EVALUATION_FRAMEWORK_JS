@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web App'iculture</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./CSS/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./JS/configuration.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <h1 class="text-center"> Onglet de configuration</h1>
+    <frequency-template></frequency-template>
+</div>
+
+<!-- template du composant 'frequence de visites' -->
+<template id="frequency-template">
+    <!-- txt est une propriété calculée et correspond à la question dans le langage sélectionné parmi ceux disponibles -->
+    <div class="frequency-insert container-fluid" v-if="!frequency">
+        <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
+        <div class="row mt-3">
+            <input type="number" class="form-control col-4 offset-2" placeholder="Fréquence globale de visites" v-model="frequencyToSave">
+            <button class="btn btn-success col-1 offset-2" v-on:click="saveFrequency"> Sauvegarder</button>
+        </div>
+    </div>
+
+    <div class="frequency-update container-fluid" v-else-if="frequency">
+        <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
+        <div class="frequency-update-lock row mt-5" v-if="!shouldEdit">
+            <p class="col-2 offset-1">
+                Nombre de visites des ruchers tous les dix jours :
+            </p>
+            <p class=" col-1 offset-2">
+                {{frequency}}
+            </p>
+            <button v-on:click="setShouldEdit" class="btn btn-info col-1 offset-1 ">Editer</button>
+        </div>
+
+        <div class="frequency-update-lock row mt-5" v-else-if="shouldEdit">
+            <input type="number" class="form-control col-4 offset-2" placeholder="Fréquence globale de visites" v-model="frequency">
+            <button class="btn btn-success col-1 offset-2" v-on:click="editFrequency"> Sauvegarder</button>
+        </div>
+    </div>
+
+</template>
+
+
+</body>
+</html>
