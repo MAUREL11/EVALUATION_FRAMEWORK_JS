@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web App'iculture</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"
+            integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7"
+            crossorigin="anonymous"></script>
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+    <link rel="stylesheet" type="text/css" href="../CSS/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="../JS/backoffice/rucher.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <h1 class="text-center jumbotron"> Gestion des ruchers</h1>
+
+
+    <list :items="items" :trash_enabled="trash_activated" :edit_enabled="edit_activated">
+
+
+        <div slot="header">
+            <h1>Liste des ruchers</h1>
+        </div>
+
+        <div slot="itemView" slot-scope="slotProps">
+            <strong class="text-uppercase">{{slotProps.item.id}}</strong>
+        </div>
+
+
+        <div slot="itemEdit" slot-scope="slotProps">
+            <div class="row">
+
+                <div class="col form-group">
+                    <input type="text" class="form-control" v-model="slotProps.item.id">
+                </div>
+                <div class="col form-group">
+                    <input type="number" class="form-control" v-model="slotProps.item.nbRuche">
+                </div>
+                <div class="col form-group">
+                    <input type="text" class="form-control" v-model="slotProps.item.lieuImplantation">
+                </div>
+
+            </div>
+        </div>
+
+        <footer slot="footer">
+            <figure class="figure w-100">
+                <figcaption class="figure-caption text-right">{{ items.length}} ruchers</figcaption>
+            </figure>
+        </footer>
+
+    </list>
+
+
+
+
+
+    <addrucher>
+        <div slot="new_item_disabled">
+            <strong class="text-uppercase">Cliquez pour ajouter un rucher</strong>
+        </div>
+    </addrucher>
+
+
+
+
+</div>
+
+
+
+
+<template id="addrucher">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <!--<slot  name="new_item_enabled"></slot>-->
+                    <div class="row" v-if="newEnabled">
+
+                        <div class="col form-group">
+                            <input type="text" placeholder="identifiant" class="form-control" v-model="rucherToSave.id">
+                        </div>
+                        <div class="col form-group">
+                            <input type="number" placeholder="nombre de ruches" class="form-control" v-model="rucherToSave.nbRuche">
+                        </div>
+                        <div class="col form-group">
+                            <input type="text" placeholder="lieu d'implantation" class="form-control" v-model="rucherToSave.lieuImplantation">
+                        </div>
+
+                    </div>
+                    <slot v-else name="new_item_disabled"></slot>
+                </div>
+
+                <div class="col-1">
+                            <span v-on:click="toggleNewMode()" class="is-link" v-show="newEnabled == false">
+                                <i class="fas fa-plus-circle"></i>
+                            </span>
+
+                    <span v-on:click="saveNewItem()" class="is-link txt-color-green"
+                          v-show="newEnabled == true">
+                                <i class="fas fa-check"></i>
+                    </span>
+
+                    <span v-on:click="toggleNewMode()" class="is-link txt-color-green"
+                          v-show="newEnabled == true">
+                                <i class="fas fa-times-circle"></i>
+                    </span>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+
+<!-- template du composant liste -->
+<template id="list">
+    <div class="container">
+        <div class="container-fluid">
+
+            <slot name="header"></slot>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" v-for="item in items" :key="item.id">
+                    <div class="row">
+
+
+                        <div class="col">
+                            <slot v-if="!item.edited" name="itemView" v-bind:item="item"></slot>
+                            <slot v-else name="itemEdit" v-bind:item="item"></slot>
+                        </div>
+
+                        <div class="col-1" v-show="edit_enabled">
+                            <span v-on:click="toggleEditMode(item)" class="is-link" v-show="item.edited == false">
+                                <i class="fas fa-user-edit"></i>
+                            </span>
+
+                            <span v-on:click="saveItem(item)" class="is-link txt-color-green"
+                                  v-show="item.edited == true">
+                                <i class="fas fa-check"></i>
+                            </span>
+
+                        </div>
+
+                        <div class="col-1" v-show="trash_enabled">
+                            <span v-on:click="remove(item)" class="is-link">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</template>
+
+
+</body>
+</html>

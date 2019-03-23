@@ -15,17 +15,8 @@ window.addEventListener("load", function (event) {
     }
 
     var store = {
-        data: [
-            {
-                name: "test env 1",
-                edited: false
-            },
-            {
-                name: "test env 2",
-                edited: false
-            }
-        ],
-        //data : storage.getStorage("environnment")
+
+        data : storage.getStorage("environnment"),
 
         getEnvironment: function () {
             return this.data;
@@ -148,16 +139,7 @@ window.addEventListener("load", function (event) {
 
     Vue.component('addenvironnment', {
 
-        // props: {
-        //     items: {
-        //         type: Array,
-        //         required: true,
-        //         validator(value) {
-        //             return true;
-        //         }
-        //     },
-        //
-        // },
+
         data: function(){
             return {
                 newEnabled: false,
