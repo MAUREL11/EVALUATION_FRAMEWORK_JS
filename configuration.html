@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Web App'iculture</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"
+            integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7"
+            crossorigin="anonymous"></script>
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
     <link rel="stylesheet" type="text/css" href="./CSS/style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -12,39 +18,178 @@
 </head>
 <body>
 <div id="app">
-    <h1 class="text-center"> Onglet de configuration</h1>
+    <h1 class="text-center jumbotron"> Onglet de configuration</h1>
     <frequency-template></frequency-template>
+
+
+    <list :items="items" :trash_enabled="trash_activated" :edit_enabled="edit_activated">
+
+
+        <div slot="header">
+            <h1>Liste des environnements</h1>
+        </div>
+
+        <div slot="itemView" slot-scope="slotProps">
+            <strong class="text-uppercase">{{slotProps.item.name}}</strong>
+        </div>
+
+
+        <div slot="itemEdit" slot-scope="slotProps">
+            <div class="row">
+
+                <div class="col form-group">
+                    <input type="text" class="form-control" v-model="slotProps.item.name">
+                </div>
+
+            </div>
+        </div>
+
+        <footer slot="footer">
+            <figure class="figure w-100">
+                <figcaption class="figure-caption text-right">{{ items.length}} environnements</figcaption>
+            </figure>
+        </footer>
+
+    </list>
+
+
+
+
+
+    <addenvironnment>
+
+
+
+        <div slot="new_item_disabled">
+            <strong class="text-uppercase">Cliquez pour ajouter un environnement</strong>
+        </div>
+
+
+
+
+
+
+    </addenvironnment>
+
+
+
+
 </div>
 
 <!-- template du composant 'frequence de visites' -->
 <template id="frequency-template">
     <!-- txt est une propriété calculée et correspond à la question dans le langage sélectionné parmi ceux disponibles -->
-    <div class="frequency-insert container-fluid" v-if="!frequency">
-        <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
-        <div class="row mt-3">
-            <input type="number" class="form-control col-4 offset-2" placeholder="Fréquence globale de visites" v-model="frequencyToSave">
-            <button class="btn btn-success col-1 offset-2" v-on:click="saveFrequency"> Sauvegarder</button>
+    <div class="container">
+        <div class="frequency-insert container-fluid" v-if="!frequency">
+            <h1 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h1>
+            <div class="row mt-3">
+                <input type="number" class="form-control col" placeholder="Fréquence globale de visites" v-model="frequencyToSave">
+                <button class="btn btn-success col-1" v-on:click="saveFrequency"> <i class="fas fa-save"></i></button>
+            </div>
+        </div>
+
+        <div class="frequency-update container-fluid" v-else-if="frequency">
+            <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
+            <div class="frequency-update-lock row mt-5" v-if="!shouldEdit">
+                <p class="col">
+                    Nombre de visites des ruchers :
+                </p>
+                <p class="col">
+                    {{frequency}}
+                </p>
+                <button v-on:click="setShouldEdit" class="btn btn-info col-1"><i class="fas fa-user-edit"></i> </button>
+            </div>
+
+            <div class="frequency-update-lock row mt-5" v-else-if="shouldEdit">
+                <input type="number" class="form-control col" placeholder="Fréquence globale de visites" v-model="frequency">
+                <button class="btn btn-success col-1" v-on:click="editFrequency"> <i class="fas fa-save"></i></button>
+            </div>
         </div>
     </div>
 
-    <div class="frequency-update container-fluid" v-else-if="frequency">
-        <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
-        <div class="frequency-update-lock row mt-5" v-if="!shouldEdit">
-            <p class="col-2 offset-1">
-                Nombre de visites des ruchers tous les dix jours :
-            </p>
-            <p class=" col-1 offset-2">
-                {{frequency}}
-            </p>
-            <button v-on:click="setShouldEdit" class="btn btn-info col-1 offset-1 ">Editer</button>
-        </div>
+</template>
 
-        <div class="frequency-update-lock row mt-5" v-else-if="shouldEdit">
-            <input type="number" class="form-control col-4 offset-2" placeholder="Fréquence globale de visites" v-model="frequency">
-            <button class="btn btn-success col-1 offset-2" v-on:click="editFrequency"> Sauvegarder</button>
+
+
+<template id="addenvironnment">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <!--<slot  name="new_item_enabled"></slot>-->
+                    <div class="row" v-if="newEnabled">
+
+                        <div class="col form-group">
+                            <input type="text" class="form-control" v-model="environnmentToSave.name" >
+                        </div>
+
+                    </div>
+                    <slot v-else name="new_item_disabled"></slot>
+                </div>
+
+                <div class="col-1">
+                            <span v-on:click="toggleNewMode()" class="is-link" v-show="newEnabled == false">
+                                <i class="fas fa-plus-circle"></i>
+                            </span>
+
+                    <span v-on:click="saveNewItem()" class="is-link txt-color-green"
+                          v-show="newEnabled == true">
+                                <i class="fas fa-check"></i>
+                    </span>
+
+                    <span v-on:click="toggleNewMode()" class="is-link txt-color-green"
+                          v-show="newEnabled == true">
+                                <i class="fas fa-times-circle"></i>
+                    </span>
+
+                </div>
+            </div>
+
         </div>
     </div>
+</template>
 
+
+<!-- template du composant liste -->
+<template id="list">
+    <div class="container">
+        <div class="container-fluid">
+
+            <slot name="header"></slot>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" v-for="item in items" :key="item.id">
+                    <div class="row">
+
+
+                        <div class="col">
+                            <slot v-if="!item.edited" name="itemView" v-bind:item="item"></slot>
+                            <slot v-else name="itemEdit" v-bind:item="item"></slot>
+                        </div>
+
+                        <div class="col-1" v-show="edit_enabled">
+                            <span v-on:click="toggleEditMode(item)" class="is-link" v-show="item.edited == false">
+                                <i class="fas fa-user-edit"></i>
+                            </span>
+
+                            <span v-on:click="saveItem(item)" class="is-link txt-color-green"
+                                  v-show="item.edited == true">
+                                <i class="fas fa-check"></i>
+                            </span>
+
+                        </div>
+
+                        <div class="col-1" v-show="trash_enabled">
+                            <span v-on:click="remove(item)" class="is-link">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
 </template>
 
 
