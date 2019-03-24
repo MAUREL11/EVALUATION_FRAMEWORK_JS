@@ -104,7 +104,8 @@ window.addEventListener("load", function (event) {
                     frequencePersonnalise: null,
                     dateCreation: new Date(),
                     name:"",
-                    edited:false
+                    edited:false,
+                    show:false
                 }
             }
         },
@@ -125,7 +126,8 @@ window.addEventListener("load", function (event) {
                     frequencePersonnalise: null,
                     dateCreation: new Date(),
                     name:"",
-                    edited:false
+                    edited:false,
+                    show:false
                 }
                 this.toggleNewMode();
             }

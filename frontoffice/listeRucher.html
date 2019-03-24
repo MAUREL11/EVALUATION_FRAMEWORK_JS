@@ -11,13 +11,14 @@
             crossorigin="anonymous"></script>
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
     <link rel="stylesheet" type="text/css" href="../CSS/style.css">
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="../JS/backoffice/rucher.js"></script>
+    <script src="../JS/frontoffice/listeRucher.js"></script>
 
 </head>
 <body>
-
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Web App'iculture</a>
@@ -27,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="../frontoffice/listeRucher.html">Liste des ruchers </a>
+                    <a class="nav-link" href="#">Liste des ruchers </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Visite d'un rucher</a>
@@ -47,33 +48,49 @@
 
 
 <div id="app">
-    <h1 class="text-center jumbotron"> Gestion des ruchers</h1>
+
+    <h1 class="text-center jumbotron"> Liste des ruchers à visiter</h1>
 
 
-    <list :items="items" :trash_enabled="trash_activated" :edit_enabled="edit_activated">
+    <list :items="items" :trash_enabled="trash_activated" :edit_enabled="edit_activated" :show_enabled="show_activated">
 
 
         <div slot="header">
             <h1>Liste des ruchers</h1>
         </div>
 
-        <div slot="itemView" slot-scope="slotProps">
-            <strong class="text-uppercase">{{slotProps.item.id}}</strong>
+        <div slot="itemViewGreen" slot-scope="slotProps">
+            <strong class="text-uppercase text-success" >{{slotProps.item.id}}</strong>
+        </div>
+        <div slot="itemViewOrange" slot-scope="slotProps">
+            <strong class="text-uppercase text-warning" >{{slotProps.item.id}}</strong>
+        </div>
+        <div slot="itemViewRed" slot-scope="slotProps">
+            <strong class="text-uppercase text-danger" >{{slotProps.item.id}}</strong>
         </div>
 
 
-        <div slot="itemEdit" slot-scope="slotProps">
-            <div class="row">
+        <div slot="itemShow" slot-scope="slotProps">
+            <div class="row mt-4">
 
-                <div class="col form-group">
-                    <input type="text" class="form-control" v-model="slotProps.item.id">
+                <div class="col">
+                    Nombre de ruche : {{slotProps.item.nbRuche}}
                 </div>
-                <div class="col form-group">
-                    <input type="number" class="form-control" v-model="slotProps.item.nbRuche">
+                <div class="col">
+                    lieu d'implantation : {{slotProps.item.lieuImplantation}}
                 </div>
-                <div class="col form-group">
-                    <input type="text" class="form-control" v-model="slotProps.item.lieuImplantation">
+                <div class="col">
+                    Nombre de visites : {{slotProps.item.historiqueVisite.length}}
                 </div>
+
+            </div>
+
+            <div class="row mt-2">
+
+                <div class="col">
+                    Fréquence de visite personnalisée : {{slotProps.item.frequencePersonnalise}}
+                </div>
+
 
             </div>
         </div>
@@ -89,64 +106,9 @@
 
 
 
-
-    <addrucher>
-        <div slot="new_item_disabled">
-            <strong class="text-uppercase">Cliquez pour ajouter un rucher</strong>
-        </div>
-    </addrucher>
-
-
-
-
 </div>
 
 
-
-
-<template id="addrucher">
-    <div class="container">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-                    <!--<slot  name="new_item_enabled"></slot>-->
-                    <div class="row" v-if="newEnabled">
-
-                        <div class="col form-group">
-                            <input type="text" placeholder="identifiant" class="form-control" v-model="rucherToSave.id">
-                        </div>
-                        <div class="col form-group">
-                            <input type="number" placeholder="nombre de ruches" class="form-control" v-model="rucherToSave.nbRuche">
-                        </div>
-                        <div class="col form-group">
-                            <input type="text" placeholder="lieu d'implantation" class="form-control" v-model="rucherToSave.lieuImplantation">
-                        </div>
-
-                    </div>
-                    <slot v-else name="new_item_disabled"></slot>
-                </div>
-
-                <div class="col-1">
-                            <span v-on:click="toggleNewMode()" class="is-link" v-show="newEnabled == false">
-                                <i class="fas fa-plus-circle"></i>
-                            </span>
-
-                    <span v-on:click="saveNewItem()" class="is-link txt-color-green"
-                          v-show="newEnabled == true">
-                                <i class="fas fa-check"></i>
-                    </span>
-
-                    <span v-on:click="toggleNewMode()" class="is-link txt-color-green"
-                          v-show="newEnabled == true">
-                                <i class="fas fa-times-circle"></i>
-                    </span>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</template>
 
 
 <!-- template du composant liste -->
@@ -162,8 +124,11 @@
 
 
                         <div class="col">
-                            <slot v-if="!item.edited" name="itemView" v-bind:item="item"></slot>
-                            <slot v-else name="itemEdit" v-bind:item="item"></slot>
+                            <slot name="itemViewGreen" v-if="item.color =='vert'" v-bind:item="item"></slot>
+                            <slot name="itemViewOrange" v-if="item.color =='orange'" v-bind:item="item"></slot>
+                            <slot name="itemViewRed" v-if="item.color =='rouge'" v-bind:item="item"></slot>
+
+                            <slot v-if="item.show" name="itemShow" v-bind:item="item"></slot>
                         </div>
 
                         <div class="col-1" v-show="edit_enabled">
@@ -181,6 +146,17 @@
                         <div class="col-1" v-show="trash_enabled">
                             <span v-on:click="remove(item)" class="is-link">
                                 <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+
+
+                        <div class="col-1" v-show="show_enabled">
+                            <span v-on:click="toggleShowMode(item)" v-show="item.show == false" class="is-link">
+                                <i class="fas fa-eye"></i>
+                            </span>
+
+                            <span v-on:click="toggleShowMode(item)" v-show="item.show == true" class="is-link">
+                                <i class="fas fa-eye-slash"></i>
                             </span>
                         </div>
                     </div>

@@ -17,6 +17,34 @@
 
 </head>
 <body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Web App'iculture</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="../frontoffice/listeRucher.html">Liste des ruchers </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Visite d'un rucher</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../backoffice/rucher.html">Administration des ruchers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../backoffice/configuration.html">Configuration</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+</header>
+
 <div id="app">
     <h1 class="text-center jumbotron"> Onglet de configuration</h1>
     <frequency-template></frequency-template>
@@ -57,19 +85,11 @@
 
 
     <addenvironnment>
-
-
-
         <div slot="new_item_disabled">
             <strong class="text-uppercase">Cliquez pour ajouter un environnement</strong>
         </div>
-
-
-
-
-
-
     </addenvironnment>
+
 
 
 
@@ -81,7 +101,7 @@
     <!-- txt est une propriété calculée et correspond à la question dans le langage sélectionné parmi ceux disponibles -->
     <div class="container">
         <div class="frequency-insert container-fluid" v-if="!frequency">
-            <h1 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h1>
+            <h1 class="mt-4"> Fréquence globale de visites des ruchers en nombre de jours :</h1>
             <div class="row mt-3">
                 <input type="number" class="form-control col" placeholder="Fréquence globale de visites" v-model="frequencyToSave">
                 <button class="btn btn-success col-1" v-on:click="saveFrequency"> <i class="fas fa-save"></i></button>
@@ -92,7 +112,7 @@
             <h2 class="mt-4"> Fréquence globale de visites des ruchers tous les dix jours :</h2>
             <div class="frequency-update-lock row mt-5" v-if="!shouldEdit">
                 <p class="col">
-                    Nombre de visites des ruchers :
+                    Nombre de jours :
                 </p>
                 <p class="col">
                     {{frequency}}
@@ -191,6 +211,8 @@
         </div>
     </div>
 </template>
+
+
 
 
 </body>
