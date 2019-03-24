@@ -9,7 +9,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"
             integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7"
             crossorigin="anonymous"></script>
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
     <link rel="stylesheet" type="text/css" href="../CSS/style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -18,10 +17,12 @@
 </head>
 <body>
 
+<!--      BARRE DE NAVIGATION      -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="../index.html">Web App'iculture</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -45,7 +46,7 @@
 
 </header>
 
-
+<!--      CORPS DE LA PAGE      -->
 <div id="app">
     <h1 class="text-center jumbotron"> Gestion des ruchers</h1>
 
@@ -87,9 +88,6 @@
     </list>
 
 
-
-
-
     <addrucher>
         <div slot="new_item_disabled">
             <strong class="text-uppercase">Cliquez pour ajouter un rucher</strong>
@@ -97,29 +95,29 @@
     </addrucher>
 
 
-
-
 </div>
 
 
+<!--        TEMPLATES :         -->
 
-
+<!-- TEMPLATE DU COMPOSANT 'ajout d'un roucher' pour gerer l'ajout d'un rucher -->
 <template id="addrucher">
     <div class="container">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col">
-                    <!--<slot  name="new_item_enabled"></slot>-->
                     <div class="row" v-if="newEnabled">
 
                         <div class="col form-group">
                             <input type="text" placeholder="identifiant" class="form-control" v-model="rucherToSave.id">
                         </div>
                         <div class="col form-group">
-                            <input type="number" placeholder="nombre de ruches" class="form-control" v-model="rucherToSave.nbRuche">
+                            <input type="number" placeholder="nombre de ruches" class="form-control"
+                                   v-model="rucherToSave.nbRuche">
                         </div>
                         <div class="col form-group">
-                            <input type="text" placeholder="lieu d'implantation" class="form-control" v-model="rucherToSave.lieuImplantation">
+                            <input type="text" placeholder="lieu d'implantation" class="form-control"
+                                   v-model="rucherToSave.lieuImplantation">
                         </div>
 
                     </div>
@@ -127,9 +125,9 @@
                 </div>
 
                 <div class="col-1">
-                            <span v-on:click="toggleNewMode()" class="is-link" v-show="newEnabled == false">
-                                <i class="fas fa-plus-circle"></i>
-                            </span>
+                    <span v-on:click="toggleNewMode()" class="is-link" v-show="newEnabled == false">
+                        <i class="fas fa-plus-circle"></i>
+                    </span>
 
                     <span v-on:click="saveNewItem()" class="is-link txt-color-green"
                           v-show="newEnabled == true">
@@ -190,7 +188,6 @@
         </div>
     </div>
 </template>
-
 
 </body>
 </html>

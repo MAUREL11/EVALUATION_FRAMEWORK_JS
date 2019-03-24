@@ -1,10 +1,25 @@
 window.addEventListener("load", function (event) {
 
-
+    /**
+     * Gestion du storage
+     * @type {{saveStorage: saveStorage, getStorage: getStorage}}
+     */
     var storage = {
+
+        /**
+         *  Sauvegarde la donnée passé en paramètre (item) dans le localstorage sous le nom de propriété key passé lui aussi en paramètre
+         * @param key
+         * @param item
+         */
         saveStorage: function (key, item) {
             localStorage.setItem(key, JSON.stringify(item))
         },
+
+        /**
+         * Récupère le contenu associé à la clé key passé en paramètre du localstorage
+         * @param key
+         * @returns {*}
+         */
         getStorage: function (key) {
             if(localStorage.getItem(key))
                 return JSON.parse(localStorage.getItem(key));
@@ -12,35 +27,81 @@ window.addEventListener("load", function (event) {
         }
     }
 
+
+    /**
+     * Outil de liaison entre le storage et VueJS
+     * @type {{data: *, getRucher: (function(): *), addRucher: addRucher, removeRucher: removeRucher, saveRucher: saveRucher, getFrequency: (function(): *), toggleEditMode(*): void, toggleShowMode(*): void, sortRuchersByDateVisitOrCreationAndColor: sortRuchersByDateVisitOrCreationAndColor, selectColorForItem: selectColorForItem}}
+     */
     var store = {
 
+        /**
+         * Donnée de l'application nécessaire pour le fonctionnement de la page
+         */
         data : storage.getStorage("rucher"),
 
-
+        /**
+         * Récupère la liste de tous les ruchers
+         * @returns {*}
+         */
         getRucher: function () {
             return this.data;
         },
+
+        /**
+         * Ajoute un rucher dans le storage et dans l'objet data
+         * @param item
+         */
         addRucher: function (item) {
             this.data.push(item);
             storage.saveStorage("rucher", this.data);
         },
+
+        /**
+         * Supprime un rucher du le storage et de l'objet data
+         * @param item
+         */
         removeRucher: function (item) {
             this.data.splice(this.data.indexOf(item), 1);
             storage.saveStorage("rucher", this.data)
         },
+
+        /**
+         * Permet de sauvegarder l'objet data dans le storage
+         */
         saveRucher : function(){
             storage.saveStorage("rucher", this.data)
         },
+
+        /**
+         * Récupère la fréquence par défaut
+         * @returns {*}
+         */
         getFrequency: function(){
             return storage.getStorage("frequency");
         },
+
+        /**
+         * Active le mode d'édition sur un item
+         * @param item
+         */
         toggleEditMode(item) {
             item.edited = !item.edited;
         },
+
+        /**
+         * Active le mode de visualisation avancé d'un item
+         * @param item
+         */
         toggleShowMode(item){
             item.show = !item.show
         },
 
+        /**
+         * Trie les ruchers selon la date de visite ou de création et rajoute une couleur
+         * qui correspond à la priorité de visite d'un rucher
+         * @param items
+         * @returns {*}
+         */
         sortRuchersByDateVisitOrCreationAndColor: function (items) {
 
             var tabAvecVisite = items.filter(function (item) {
@@ -80,6 +141,11 @@ window.addEventListener("load", function (event) {
             }
         },
 
+        /**
+         * Choix des couleurs pour un item
+         * @param item
+         * @returns {string}
+         */
         selectColorForItem: function (item) {
             if(item.historiqueVisite.length >0){
 
@@ -137,8 +203,15 @@ window.addEventListener("load", function (event) {
     }
 
 
+    //////////////////////////////////////////////
+    //                                          //
+    //                 COMPONENT                //
+    //                                          //
+    //////////////////////////////////////////////
 
-
+    /**
+     * Composant de visualisation des ruchers
+     */
     Vue.component('list', {
 
         props: {
@@ -176,22 +249,46 @@ window.addEventListener("load", function (event) {
         // template associé
         template: '#list',
         methods: {
+
+            /**
+             * Supprime un rucher
+             * @param item
+             */
             remove: function (item) {
-
                 store.removeRucher(item);
-
             },
+
+            /**
+             * Active le mode edition d'un item
+             * @param item
+             */
             toggleEditMode: function (item) {
                 store.toggleEditMode(item);
             },
+
+            /**
+             * Active le mode visualisation d'un item
+             * @param item
+             */
             toggleShowMode: function(item){
                 store.toggleShowMode(item);
             },
+
+            /**
+             * Sauvegarde un item
+             * @param item
+             */
             saveItem: function (item) {
                 store.saveRucher();
                 store.toggleEditMode(item);
 
             },
+
+            /**
+             * Retourne la couleur associé à un item
+             * @param item
+             * @returns {*|string}
+             */
             showColorForItem: function (item) {
                 return store.selectColorForItem(item);
             }
@@ -208,11 +305,10 @@ window.addEventListener("load", function (event) {
     var app = new Vue({
         el: '#app',
         data: {
-            // items: store.data,
-            items: store.sortRuchersByDateVisitOrCreationAndColor(store.data),
-            trash_activated: false,
-            edit_activated: false,
-            show_activated: true
+            items: store.sortRuchersByDateVisitOrCreationAndColor(store.data),      // données de l'application
+            trash_activated: false,             // Spécifie si on active ou non la possibilité de supprimer un item
+            edit_activated: false,              // Spécifie si on active ou non la possibilité d'editer un item
+            show_activated: true                // Spécifie si on active ou non la possibilité de visualiser un item
         },
 
 

@@ -87,8 +87,11 @@
 
             <div class="row mt-2">
 
-                <div class="col">
+                <div class="col" v-if="slotProps.item.frequencePersonnalise">
                     Fréquence de visite personnalisée : {{slotProps.item.frequencePersonnalise}}
+                </div>
+                <div class="col" v-else>
+                    Aucune fréquence de visite saisie
                 </div>
 
 
@@ -118,7 +121,7 @@
 
             <slot name="header"></slot>
 
-            <ul class="list-group list-group-flush">
+            <ul class="list-group mt-4 list-group-flush" v-if="items.length>0">
                 <li class="list-group-item" v-for="item in items" :key="item.id">
                     <div class="row">
 
@@ -162,6 +165,7 @@
                     </div>
                 </li>
             </ul>
+            <p class="text-center mt-4" v-else> Aucun rucher n'a été saisi. Vous pouvez les saisir grâce à l'onglet "Administration des ruchers"</p>
 
         </div>
     </div>
